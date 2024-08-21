@@ -1,6 +1,7 @@
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Search from "./Search";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -12,13 +13,15 @@ export default function Header() {
         variant="text"
         aria-label="Basic button group"
       >
-        <Button variant="contained">Dashboard</Button>
+        <Button variant="contained">
+          <Link to={"/"}>Dashboard</Link>
+        </Button>
         <div>
           <Button className="hover:underline hover:font-semibold">
-            Sign In
+            <Link to={"/sign-in"}> Sign In</Link>
           </Button>
           <Button className="hover:underline hover:font-semibold">
-            Sign Up
+            <Link to={"/sign-up"}> Sign Up</Link>
           </Button>
         </div>
       </ButtonGroup>
