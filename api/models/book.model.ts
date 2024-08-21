@@ -19,6 +19,10 @@ const bookReviewSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Please provide a rating"],
     },
+    userRef: {
+      type: String,
+      require: [true, "No User Refference"],
+    },
   },
   { timestamps: true }
 );
