@@ -1,21 +1,29 @@
 import express, { NextFunction, Request, Response } from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import "dotenv/config";
 import connectDB from "./connectDB/connect";
 
-interface CustomError extends Error {
+export interface CustomError extends Error {
   statusCode?: number;
 }
 
 const PORT = 3000;
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.get("/api/test", async (req: Request, res: Response) => {
-  res.json({ message: "Hello world" });
-});
+import userBook from "./routes/books";
+import authUser from "./routes/auth";
+
+app.use("/api/books", userBook);
+app.use("/api/auth", authUser);
+
+// app.get("/api/test", async (req: Request, res: Response) => {
+//   res.json({ message: "Hello world" });
+// });
 
 app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
   const statusCode = err.statusCode || 500;
