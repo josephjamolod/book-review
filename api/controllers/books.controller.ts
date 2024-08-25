@@ -144,3 +144,26 @@ export const getUserBooks = async (
     next(error);
   }
 };
+
+export const getSingleBook = async (
+  req: customRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return next(errorHandler(401, "Listing not found"));
+  }
+  const { userId }: UserType = req.user!;
+  const book = await Book.findById(req.params.id);
+  if (!book) {
+    return next(errorHandler(401, "Book not found"));
+  }
+  if (book.userRef !== userId) {
+    return next(errorHandler(403, "You can only get your own book"));
+  }
+  try {
+    res.status(200).json(book);
+  } catch (error) {
+    next(error);
+  }
+};
