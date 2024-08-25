@@ -17,7 +17,7 @@ export const verifyToken = (
   next: NextFunction
 ) => {
   const token: string = req.cookies.access_token;
-  // console.log(token);
+  // console.log("token in middleware:" + token);
 
   if (!token) {
     return next(errorHandler(401, "Invalid Token"));

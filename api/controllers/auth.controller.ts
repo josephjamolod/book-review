@@ -33,7 +33,7 @@ export const signUp = async (
     const user = await User.create({ username, email, password });
     const userWithoutPass = await User.findById(user).select("-password");
 
-    return res.status(201).json(userWithoutPass);
+    return res.status(201).json({ message: "User Successfully created" });
   } catch (error) {
     return next(error);
   }
@@ -63,7 +63,12 @@ export const signIn = async (
     const userWithoutPassword = await User.findById(user).select("-password");
 
     res
-      .cookie("access_token", token, { httpOnly: true })
+      .cookie("access_token", token, {
+        httpOnly: true,
+        secure: false, // Set to false in development (HTTP)
+        sameSite: "lax",
+        path: "/",
+      })
       .status(200)
       .json(userWithoutPassword);
   } catch (error) {
@@ -118,18 +123,27 @@ export const signOutUser = async (
   }
 };
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export const updateUser = async (
   req: customRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const { username, email }: { username: string; email: string } = req.body;
+  const { username, email }: { username: string | null; email: string | null } =
+    req.body;
   const { userId } = req.user!;
   if (req.params.id !== userId) {
     return next(errorHandler(401, "You can only update your own profile"));
   }
-  if (!username) {
-    return next(errorHandler(404, "Please provide a name to update"));
+  if (username?.trim() === "") {
+    return next(errorHandler(400, "empty name is not allowed"));
+  }
+  if (email?.trim() === "") {
+    return next(errorHandler(400, "empty email is not allowed"));
+  }
+  if (email && !emailRegex.test(email)) {
+    return next(errorHandler(400, "Invalid email format"));
   }
   const user: any = await User.findById(req.params.id);
   if (!user) {
@@ -141,7 +155,7 @@ export const updateUser = async (
       user,
       {
         $set: {
-          username: username.trim(),
+          username: username?.trim(),
           email: email?.trim(),
         },
       },
@@ -155,3 +169,11 @@ export const updateUser = async (
     next(error);
   }
 };
+
+// export const updatedUser = async (
+//   req: customRequest,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   res.send("Hello word");
+// };

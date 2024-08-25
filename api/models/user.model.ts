@@ -49,6 +49,7 @@ userSchema.methods.createJWT = async function () {
     process.env.JWT_SECRET!,
     { expiresIn: process.env.JWT_LIFETIME! }
   );
+  // console.log("Generated Token:", token);
   return token;
 };
 

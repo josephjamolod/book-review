@@ -12,7 +12,6 @@ import { useEffect, useState } from "react";
 import Axios from "axios";
 import config from "../config";
 import { useAppSelector } from "../redux/hooks";
-import CreateBook from "../components/CreateBook";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -45,7 +44,7 @@ interface BooksType {
   _id: string;
 }
 
-export default function Dashboard() {
+export default function UserBooks() {
   const { currentUser, toggle } = useAppSelector((state) => state.user);
   const [books, setBooks] = useState<null | BooksType[]>(null);
   const urlParams = new URLSearchParams(window.location.search);
@@ -67,10 +66,15 @@ export default function Dashboard() {
   const fetchBooks = async () => {
     try {
       const response = await Axios.get(
-        `${config.apiUrl}/books/get-all-books?${urlParams.toString()}`
+        `${config.apiUrl}/books/get-user-books/${
+          currentUser?._id
+        }/?${urlParams.toString()}`,
+        {
+          withCredentials: true,
+        }
       );
       const data: BooksType[] = response.data;
-      //console.log(response.data);
+      // console.log(response.data);
       setBooks(data);
     } catch (error) {
       console.log(error);
@@ -84,11 +88,10 @@ export default function Dashboard() {
   useEffect(() => {
     // console.log(urlParams.toString());
     fetchBooks();
-  }, [window.location.search, toggle]);
+  }, [window.location.search]);
 
   return (
-    <div className="flex flex-col items-center gap-y-5 px-10 ">
-      <CreateBook />
+    <div className="px-10 w-full">
       <TableContainer className=" mx-auto shadow-lg " component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
