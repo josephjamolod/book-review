@@ -29,6 +29,9 @@ app.use("/api/auth", authUser);
 // app.get("/api/test", async (req: Request, res: Response) => {
 //   res.json({ message: "Hello world" });
 // });
+app.get("/test", (req: Request, res: Response) => {
+  res.json({ message: "Test route working!" });
+});
 
 app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
   const statusCode = err.statusCode || 500;
