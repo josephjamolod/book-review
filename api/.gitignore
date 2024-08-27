@@ -7,10 +7,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Environment variables
 .env
+
+# Dependency directories
 node_modules
 dist
+
+# Build outputs
 dist-ssr
+dist
+.vite
+
+# Local environment files
 *.local
 
 # Editor directories and files
@@ -23,3 +32,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Client-side build outputs (if using React, Angular, etc.)
+client/dist
+client/build
+
+# Ignore package-lock files if you don't want to track them
+package-lock.json
+yarn.lock
