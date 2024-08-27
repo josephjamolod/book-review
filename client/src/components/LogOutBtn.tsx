@@ -1,4 +1,5 @@
-import { Button } from "@mui/material";
+import { Button as SubmitButton } from "@mui/material";
+import Button from "@mui/joy/Button";
 import Axios from "axios";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import config from "../config";
@@ -33,9 +34,13 @@ export default function LogOutBtn() {
       dispatch(signOutUserFailure());
     }
   };
-  return (
-    <Button onClick={handleLogOut} variant="outlined">
+  return !loading ? (
+    <SubmitButton onClick={handleLogOut} variant="outlined">
       Log Out
+    </SubmitButton>
+  ) : (
+    <Button className="w-full border " loading loadingPosition="end">
+      Logging Out
     </Button>
   );
 }

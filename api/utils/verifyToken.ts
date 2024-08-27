@@ -31,3 +31,21 @@ export const verifyToken = (
     return next(error);
   }
 };
+
+export const checkToken = (
+  req: customRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const token = req.cookies.access_token;
+
+  try {
+    if (!token) {
+      return res.status(200).json({ msg: "No token" });
+    } else {
+      return res.status(200).json({ msg: "Token present" });
+    }
+  } catch (error) {
+    return next(error);
+  }
+};

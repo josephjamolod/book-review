@@ -2,7 +2,8 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Button } from "@mui/material";
+import { Button as SubmitButton } from "@mui/material";
+import Button from "@mui/joy/Button";
 import Axios from "axios";
 import config from "../config";
 import { useState } from "react";
@@ -139,12 +140,18 @@ export default function SignUp() {
               <p className="text-red-500">{errors.confirmPassword.message}</p>
             )}
           </div>
+          {loading ? (
+            <Button className="w-full border " loading loadingPosition="start">
+              Signing up
+            </Button>
+          ) : (
+            <SubmitButton type="submit" className="w-full" variant="contained">
+              Sign Up
+            </SubmitButton>
+          )}
 
-          <Button type="submit" className="w-full" variant="contained">
-            Sign Up
-          </Button>
           {error && <p className="text-red-500 text-center">{error}</p>}
-          {loading && <p>loading...</p>}
+
           <p className="flex justify-center space-x-1">
             <span className="text-slate-700">Already have an account?</span>
             <Link className="text-blue-500 hover:underline" to="/sign-in">

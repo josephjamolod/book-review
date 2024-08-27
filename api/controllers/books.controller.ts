@@ -86,6 +86,10 @@ export const updateBook = async (
 ) => {
   const { bookTitle, author, reviewText, rating }: BookType = req.body;
 
+  if (!bookTitle || !author || !reviewText || !rating) {
+    return next(errorHandler(401, "All field must not be empty"));
+  }
+
   const { userId }: UserType = req.user!;
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return next(errorHandler(401, "Invalid ID format"));
@@ -108,7 +112,8 @@ export const updateBook = async (
           rating,
         },
       },
-      { new: true }
+
+      { new: true, runValidators: true }
     );
     res.status(200).json(newBook);
   } catch (error) {

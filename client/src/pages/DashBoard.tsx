@@ -50,20 +50,6 @@ export default function Dashboard() {
   const [books, setBooks] = useState<null | BooksType[]>(null);
   const urlParams = new URLSearchParams(window.location.search);
 
-  // const fetchUser = async () => {
-  //   const response = await Axios.get(
-  //     `${config.apiUrl}/auth/get-user/${currentUser?._id}`,
-  //     {
-  //       withCredentials: true, // This is crucial for sending cookies with the request
-  //     }
-  //   );
-  //   console.log(response?.data);
-  // };
-
-  // useEffect(() => {
-  //   fetchUser();
-  // }, []);
-
   const fetchBooks = async () => {
     try {
       const response = await Axios.get(
@@ -87,9 +73,12 @@ export default function Dashboard() {
   }, [window.location.search, toggle]);
 
   return (
-    <div className="flex flex-col items-center gap-y-5 px-10 ">
-      <CreateBook />
-      <TableContainer className=" mx-auto shadow-lg " component={Paper}>
+    <div className="flex flex-col items-center px-10 pt-5">
+      {currentUser && <CreateBook />}
+      <h1 className="text-center text-slate-400 text-3xl font-bold   -mb-4">
+        Books Dashboard
+      </h1>
+      <TableContainer className="mt-10 mx-auto shadow-lg " component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>

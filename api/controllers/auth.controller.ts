@@ -19,6 +19,7 @@ export const signUp = async (
     password: string;
     confirmPassword: string;
   } = req.body;
+
   if (!username || !email || !password || !confirmPassword) {
     return next(errorHandler(400, "Please provide all field"));
   }

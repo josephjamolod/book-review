@@ -5,17 +5,17 @@ const bookReviewSchema = new mongoose.Schema(
     bookTitle: {
       type: String,
       required: [true, "Please provide a book title"],
-      maxlength: [50, "Must not exceed 50 characters"],
+      maxlength: [50, "BOok title must not exceed 50 characters"],
     },
     author: {
       type: String,
       required: [true, "Please provide an author"],
-      maxlength: [30, "Must not exceed 30 characters"],
+      maxlength: [30, "Author must not exceed 30 characters"],
     },
     reviewText: {
       type: String,
       required: [true, "Please provide a review"],
-      minlength: [10, "Must atleast 10 characters"],
+      minlength: [10, "Review Text ust atleast 10 characters"],
     },
     rating: {
       type: Number,

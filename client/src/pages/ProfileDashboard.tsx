@@ -60,8 +60,8 @@ export default function ProfileDashboard() {
     }
   };
   return (
-    <div className="pt-20 flex ">
-      <div className="flex flex-shrink">
+    <div className="pt-10 md:pt-20 flex flex-col md:flex-row items-center md:items-start">
+      <div className="flex flex-shrink mb-5">
         <div className="border-slate-200 relative flex  w-80 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg border ">
           <div className="flex flex-col justify-center p-5 relative mx-4 -mt-6 h-40 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40 bg-gradient-to-r from-blue-500 to-blue-600">
             <h5 className="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
@@ -109,6 +109,10 @@ export default function ProfileDashboard() {
           </div>
         </div>
       </div>
+
+      <h1 className="text-center text-slate-400 text-2xl font-bold  mb-5 md:hidden">
+        Your Books
+      </h1>
       <UserBooks />
     </div>
   );

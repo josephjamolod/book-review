@@ -44,15 +44,15 @@ export default function Search() {
   return (
     <div
       className={
-        "flex  border  rounded-md border-slate-200 transition-all duration-200"
+        "flex  border  rounded-md border-blue-400 transition-all duration-200 mx-5"
       }
     >
-      <form onSubmit={handleSearchSubmit} className="flex">
+      <form onSubmit={handleSearchSubmit} className="flex ">
         <input
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search Author..."
-          className="input w-full py-2 pl-3 rounded-md focus:outline-none bg-white  dark:text-neutral-300"
+          className="input w-full py-1 md:py-2 pl-3 rounded-md focus:outline-none bg-white  "
           type="text"
         />
         <button
@@ -60,13 +60,13 @@ export default function Search() {
           onClick={clearInputs}
           className={`${
             !searchTerm && "hidden"
-          } px-4 cursor-pointer bg-white hover:bg-green-50 font-semibold dark:text-neutral-300  `}
+          } px-4 cursor-pointer bg-white hover:bg-blue-50  font-semibold   `}
         >
           x
         </button>
-        <div className="border-l px-2 flex justify-center items-center">
+        <div className="border-l px-2 border-blue-400 flex justify-center items-center">
           <button>
-            <SearchIcon className=" border-slate-200 dark:text-neutral-300" />
+            <SearchIcon className=" border-blue-400 " />
           </button>
         </div>
       </form>

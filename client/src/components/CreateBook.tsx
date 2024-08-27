@@ -8,12 +8,13 @@ import Rating from "@mui/material/Rating";
 import Textarea from "@mui/joy/Textarea";
 import { Input } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import Alert from "@mui/material/Alert";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import config from "../config";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { toggle } from "../redux/user/userSlice";
@@ -38,7 +39,7 @@ const schema = yup.object().shape({
     .min(1, "minimum of 1 star"),
 });
 
-interface FormData {
+export interface FormData {
   bookTitle: string;
   author: string;
   reviewText: string;
@@ -49,6 +50,7 @@ export default function CreateBook() {
   const dispatch = useAppDispatch();
   const { currentUser } = useAppSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
+  const [created, setCreated] = useState(false);
   const [rate, setRate] = useState(0);
 
   const {
@@ -71,10 +73,17 @@ export default function CreateBook() {
         { withCredentials: true }
       );
       // console.log(response.data);
-      setLoading(false);
+
       dispatch(toggle(new Date()));
       reset();
       setRate(0);
+      setTimeout(() => {
+        setCreated(true);
+        setTimeout(() => {
+          setCreated(false);
+        }, 1500);
+      }, 1500);
+      setLoading(false);
     } catch (err) {
       // console.log(err);
       if (err instanceof Error) {
@@ -86,113 +95,121 @@ export default function CreateBook() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-10">
-      <Card
-        variant="solid"
-        color="primary"
-        invertedColors
-        sx={{
-          boxShadow: "lg",
-          width: 400,
-          maxWidth: "100%",
-          // to make the demo resizeable
-          overflow: "auto",
-          resize: "horizontal",
-        }}
-      >
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <Chip className="min-w-[70px] " size="sm" variant="soft">
-            Rating:
-          </Chip>
+    <div>
+      {created && (
+        <Alert className=" -mb-9 -mt-3 " variant="outlined" severity="success">
+          Book created successfully
+        </Alert>
+      )}
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-10 ">
+        <Card
+          className="px-7 md:px-5"
+          variant="solid"
+          color="primary"
+          invertedColors
+          sx={{
+            boxShadow: "lg",
+            width: 400,
+            maxWidth: "100%",
+            // to make the demo resizeable
+            overflow: "auto",
+            resize: "horizontal",
+          }}
+        >
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Chip className="min-w-[70px] " size="sm" variant="soft">
+              Rating:
+            </Chip>
 
-          <Rating
-            onChange={(_, newValue) => {
-              if (newValue !== null) {
-                setValue("rating", newValue);
-                setRate(newValue);
-              } else {
-                setRate(0);
-                setValue("rating", 0);
-              }
-            }}
-            name="no-value"
-            value={rate}
-          />
-        </Box>
-        {errors.rating && (
-          <p className="text-center text-red-500  text-sm">
-            {errors.rating.message}
-          </p>
-        )}
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <Chip className="min-w-[70px]" size="sm" variant="soft">
-            Book Title:
-          </Chip>
-          <div>
-            <Input
-              {...register("bookTitle")}
-              className="text-white"
-              placeholder="Book Title"
+            <Rating
+              onChange={(_, newValue) => {
+                if (newValue !== null) {
+                  setValue("rating", newValue);
+                  setRate(newValue);
+                } else {
+                  setRate(0);
+                  setValue("rating", 0);
+                }
+              }}
+              name="no-value"
+              value={rate}
             />
-          </div>
-        </Box>
-        {errors.bookTitle && (
-          <p className="text-center text-red-500  text-sm">
-            {errors.bookTitle.message}
-          </p>
-        )}
-        <CardContent>
+          </Box>
+          {errors.rating && (
+            <p className="text-center text-red-500  text-sm">
+              {errors.rating.message}
+            </p>
+          )}
           <Box sx={{ display: "flex", gap: 1 }}>
             <Chip className="min-w-[70px]" size="sm" variant="soft">
-              Author:
+              Book Title:
             </Chip>
             <div>
               <Input
-                {...register("author")}
+                {...register("bookTitle")}
                 className="text-white"
-                placeholder="Author"
+                placeholder="Book Title"
               />
             </div>
           </Box>
-          {errors.author && (
+          {errors.bookTitle && (
             <p className="text-center text-red-500  text-sm">
-              {errors.author.message}
+              {errors.bookTitle.message}
             </p>
           )}
-          <label className="mt-2 px-2">Book Review :</label>
-          <Textarea
-            {...register("reviewText")}
-            className=" bg-white text-[#1976d2]"
-            placeholder="Type in here…"
-            minRows={2}
-            sx={{
-              "&::before": {
-                display: "none",
-              },
-              "&:focus-within": {
-                outline: "2px solid var(--Textarea-focusedHighlight)",
-                outlineOffset: "2px",
-              },
-            }}
-          />
-        </CardContent>
-        {errors.reviewText && (
-          <p className="text-center text-red-500  text-sm">
-            {errors.reviewText.message}
-          </p>
-        )}
-        <CardActions className="-mt-2">
-          {loading ? (
-            <Button loading loadingPosition="end" endDecorator={<SendIcon />}>
-              Creating
-            </Button>
-          ) : (
-            <Button type="submit" variant="solid">
-              Create Book
-            </Button>
+          <CardContent>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <Chip className="min-w-[70px]" size="sm" variant="soft">
+                Author:
+              </Chip>
+              <div>
+                <Input
+                  {...register("author")}
+                  className="text-white"
+                  placeholder="Author"
+                />
+              </div>
+            </Box>
+            {errors.author && (
+              <p className="text-center text-red-500  text-sm">
+                {errors.author.message}
+              </p>
+            )}
+            <label className="mt-2 px-2">Book Review :</label>
+            <Textarea
+              {...register("reviewText")}
+              className=" bg-white text-[#1976d2]"
+              placeholder="Type in here…"
+              minRows={2}
+              sx={{
+                "&::before": {
+                  display: "none",
+                },
+                "&:focus-within": {
+                  outline: "2px solid var(--Textarea-focusedHighlight)",
+                  outlineOffset: "2px",
+                },
+              }}
+            />
+          </CardContent>
+          {errors.reviewText && (
+            <p className="text-center text-red-500  text-sm">
+              {errors.reviewText.message}
+            </p>
           )}
-        </CardActions>
-      </Card>
-    </form>
+          <CardActions className="-mt-2">
+            {loading ? (
+              <Button loading loadingPosition="end" endDecorator={<SendIcon />}>
+                Creating
+              </Button>
+            ) : (
+              <Button type="submit" variant="solid">
+                Create Book
+              </Button>
+            )}
+          </CardActions>
+        </Card>
+      </form>
+    </div>
   );
 }
