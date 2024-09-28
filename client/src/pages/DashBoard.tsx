@@ -13,6 +13,7 @@ import Axios from "axios";
 import config from "../config";
 import { useAppSelector } from "../redux/hooks";
 import CreateBook from "../components/CreateBook";
+import { Button } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -47,6 +48,7 @@ interface BooksType {
 
 export default function Dashboard() {
   const { currentUser, toggle } = useAppSelector((state) => state.user);
+  const [showmore, setShowmore] = useState(true);
   const [books, setBooks] = useState<null | BooksType[]>(null);
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -58,6 +60,9 @@ export default function Dashboard() {
       const data: BooksType[] = response.data;
       //console.log(response.data);
       setBooks(data);
+      if (data.length < 9) {
+        setShowmore(false);
+      }
     } catch (error) {
       console.log(error);
 
@@ -72,13 +77,36 @@ export default function Dashboard() {
     fetchBooks();
   }, [window.location.search, toggle]);
 
+  const fetchAnotherBooks = async () => {
+    try {
+      urlParams.set("startIndex", `${books?.length}`);
+      const response = await Axios.get(
+        `${config.apiUrl}/books/get-all-books?${urlParams.toString()}`
+      );
+      const data: BooksType[] = response.data;
+      setBooks([...(books || []), ...data]);
+      if (data.length < 9) {
+        setShowmore(false);
+      }
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col items-center px-10 pt-5">
       {currentUser && <CreateBook />}
       <h1 className="text-center text-slate-400 text-3xl font-bold   -mb-4">
         Books Dashboard
       </h1>
-      <TableContainer className="mt-10 mx-auto shadow-lg " component={Paper}>
+      <TableContainer
+        className="mt-10 mx-auto shadow-lg mb-4"
+        component={Paper}
+      >
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
@@ -109,6 +137,15 @@ export default function Dashboard() {
           </TableBody>
         </Table>
       </TableContainer>
+      {showmore && (
+        <Button
+          onClick={fetchAnotherBooks}
+          variant="contained"
+          className="my-4"
+        >
+          Show more
+        </Button>
+      )}
     </div>
   );
 }

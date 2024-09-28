@@ -8,7 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Rating from "@mui/material/Rating";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
-import { Button as SubmitButton } from "@mui/material";
+import { Button, Button as SubmitButton } from "@mui/material";
 
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import IconButton from "@mui/material/IconButton";
@@ -54,22 +54,9 @@ interface BooksType {
 
 export default function UserBooks() {
   const { currentUser, toggle } = useAppSelector((state) => state.user);
+  const [showmore, setShowmore] = useState(true);
   const [books, setBooks] = useState<null | BooksType[]>(null);
   const urlParams = new URLSearchParams(window.location.search);
-
-  // const fetchUser = async () => {
-  //   const response = await Axios.get(
-  //     `${config.apiUrl}/auth/get-user/${currentUser?._id}`,
-  //     {
-  //       withCredentials: true, // This is crucial for sending cookies with the request
-  //     }
-  //   );
-  //   console.log(response?.data);
-  // };
-
-  // useEffect(() => {
-  //   fetchUser();
-  // }, []);
 
   const fetchBooks = async () => {
     try {
@@ -98,9 +85,34 @@ export default function UserBooks() {
     fetchBooks();
   }, [window.location.search, toggle]);
 
+  const fetchAnotherBooks = async () => {
+    try {
+      urlParams.set("startIndex", `${books?.length}`);
+      const response = await Axios.get(
+        `${config.apiUrl}/books/get-user-books/${
+          currentUser?._id
+        }/?${urlParams.toString()}`,
+        {
+          withCredentials: true,
+        }
+      );
+      const data: BooksType[] = response.data;
+      setBooks([...(books || []), ...data]);
+      if (data.length < 9) {
+        setShowmore(false);
+      }
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
+    }
+  };
+
   return (
     <div className="px-10 w-full overflow-y-auto">
-      <TableContainer className=" mx-auto shadow-lg " component={Paper}>
+      <TableContainer className=" mx-auto shadow-lg mb-4" component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
@@ -159,6 +171,15 @@ export default function UserBooks() {
           </div>
         )}
       </TableContainer>
+      {showmore && (
+        <Button
+          onClick={fetchAnotherBooks}
+          variant="contained"
+          className="my-4 block mx-auto"
+        >
+          Show more
+        </Button>
+      )}
     </div>
   );
 }

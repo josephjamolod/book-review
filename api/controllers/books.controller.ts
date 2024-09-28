@@ -39,7 +39,10 @@ export const getAllBooks = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { searchTerm } = req.query;
+  const { searchTerm, startIndex } = req.query as {
+    searchTerm?: string;
+    startIndex?: number;
+  };
   try {
     const queryObject: {
       author?: any;
@@ -48,7 +51,9 @@ export const getAllBooks = async (
       queryObject.author = { $regex: searchTerm, $options: "i" };
     }
 
-    const books = await Book.find(queryObject);
+    const books = await Book.find(queryObject)
+      .limit(9)
+      .skip(startIndex || 0);
     res.status(200).json(books);
   } catch (error) {
     next(error);
@@ -130,7 +135,10 @@ export const getUserBooks = async (
   if (userId !== req.params.id) {
     return next(errorHandler(401, "Unauthorize User1"));
   }
-  const { searchTerm } = req.query;
+  const { searchTerm, startIndex } = req.query as {
+    searchTerm?: string;
+    startIndex?: number;
+  };
   try {
     const queryObject: {
       userRef: string;
@@ -143,7 +151,9 @@ export const getUserBooks = async (
     if (Object.keys(queryObject).length === 0) {
       return res.status(200).json([]);
     }
-    const books = await Book.find(queryObject);
+    const books = await Book.find(queryObject)
+      .limit(9)
+      .skip(startIndex || 0);
     res.status(200).json(books);
   } catch (error) {
     next(error);

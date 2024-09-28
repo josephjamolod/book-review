@@ -32,7 +32,6 @@ export default function Header() {
       });
       console.log(response.data);
       if (response.data.msg === "No token") {
-        console.log("red");
         dispatch(checkUser());
       }
     } catch (error) {
