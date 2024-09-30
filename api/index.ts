@@ -15,7 +15,10 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin: ["https://book-review-platform-livid.vercel.app/"], // Replace with your client deployment URL
+  origin: [
+    "https://book-review-platform-livid.vercel.app",
+    "https://book-review-platform-4k7gpzzu8-josephs-projects-ee1acd2a.vercel.app",
+  ], // Replace with your client deployment URL
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
