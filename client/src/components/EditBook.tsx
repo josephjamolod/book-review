@@ -21,7 +21,7 @@ export default function EditBook({
     try {
       setLoading(true);
       setError(false);
-      const response = await Axios.patch(
+      await Axios.patch(
         `${config.apiUrl}/books/update-book/${_id}`,
         { author, bookTitle, rating, reviewText },
         { withCredentials: true }

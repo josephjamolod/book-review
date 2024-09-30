@@ -67,7 +67,7 @@ export default function CreateBook() {
     // console.log(data);
     try {
       setLoading(true);
-      const response = await Axios.post(
+      await Axios.post(
         `${config.apiUrl}/books/create-book/${currentUser?._id}`,
         data,
         { withCredentials: true }

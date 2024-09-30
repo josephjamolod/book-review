@@ -50,7 +50,7 @@ export default function UpdateBook() {
   };
 
   const handleRatingChange = (
-    event: React.SyntheticEvent,
+    _: React.SyntheticEvent,
     newValue: number | null
   ) => {
     if (newValue !== null) {

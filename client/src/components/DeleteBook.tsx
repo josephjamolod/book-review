@@ -16,10 +16,9 @@ export default function DeleteBook({ id }: { id: string }) {
     // console.log(id);
     try {
       setLoading(true);
-      const response = await Axios.delete(
-        `${config.apiUrl}/books/delete-book/${id}`,
-        { withCredentials: true }
-      );
+      await Axios.delete(`${config.apiUrl}/books/delete-book/${id}`, {
+        withCredentials: true,
+      });
       // console.log(response.data);
       dispatch(toggle(new Date()));
       setLoading(false);

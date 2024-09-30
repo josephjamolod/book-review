@@ -16,7 +16,7 @@ import Search from "./Search";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import LogOutBtn from "./LogOutBtn";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Axios from "axios";
 import config from "../config";
 import { checkUser } from "../redux/user/userSlice";
