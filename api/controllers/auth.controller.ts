@@ -66,8 +66,8 @@ export const signIn = async (
     res
       .cookie("access_token", token, {
         httpOnly: true,
-        secure: false, // Set to false in development (HTTP)
-        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production", // Set to false in development (HTTP)
+        sameSite: "none",
         path: "/",
       })
       .status(200)
