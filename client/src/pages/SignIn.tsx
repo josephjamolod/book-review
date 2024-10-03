@@ -127,7 +127,7 @@ export default function SignIn() {
           )}
 
           {error && <p className="text-red-500 text-center">{error}</p>}
-          {loading && <p>loading...</p>}
+
           <p className="flex justify-center space-x-1">
             <span className="text-slate-700"> Already have an account? </span>
             <Link className="text-blue-500 hover:underline" to="/sign-up">
